@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from scapy.all import *
 import argparse
 
@@ -11,7 +12,7 @@ packages = 1
 
 while True:
     IP1 = IP(src=arguments.src, dst=arguments.target)
-    TCP1 = TCP(sport=arguments.port, dport=80)
+    TCP1 = TCP(sport=int(arguments.port), dport=80)
     package = IP1 / TCP1    #make package
     send(package, inter=.001)   #inter: time interval to wait between two packages
     print("Number of packages: ", packages)
