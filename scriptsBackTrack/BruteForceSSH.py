@@ -1,7 +1,7 @@
 #!/usr/bin/python
-#mix python 2 and 3, stopped script.
+#mix python and 3, stopped script.
 
-import paramiko    #Python module to work with the SSH protocol
+import paramiko    #Python 2 module to work with the SSH protocol
 import socket
 import argparse
 from optparser import OptionParser
