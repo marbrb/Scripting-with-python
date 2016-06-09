@@ -18,9 +18,9 @@ arguments = parser.parse_args()
 def extractFile(zipFile, password):
     try:
         zipFile.extractall(pwd=password)
-        return password
+        print "[+] Found password: %s"%(password)
     except:
-        return
+        pass
 
 def main():
     zipFile = zipfile.ZipFile(arguments.zipfile)
