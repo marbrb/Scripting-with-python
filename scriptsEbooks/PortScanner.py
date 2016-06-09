@@ -7,26 +7,30 @@
 
 import argparse
 import socket
+from threading import Thread, Semaphore
 from socket import *
 
-parser = argparse.ArgumentParser(description="Port Scanner")
-parser.add_argument("-H", "--host", dest="targetHost", help="Type the target host", required=True)
-parser.add_argument("-p", "--port", dest="targetPort", type=str, help="Type the target port", required=True)
-arguments = parser.parse_args()
-
+screenlock = Semaphore(value=1)
 def connScan(targetHost, targetPort):
     try:
         conSocket = socket(AF_INET, SOCK_STREAM)    #(IPV4, TCP)
         conSocket.connect((targetHost, targetPort))
         conSocket.send('ViolentPython\r\n')
         response = conSocket.recv(100)
+        screenlock.acquire()
         print "[+] %d/tcp open"% targetPort
         if response:
             print "[+] response: "+ str(response)
         conSocket.close()
 
     except:
+        screenlock.acquire()
         print "[-] %d/tcp closed"% targetPort
+
+    finally:
+        screenlock.release()
+        conSocket.close()
+
 
 def portScan(targetHost, targetPorts):
     try:
@@ -46,10 +50,15 @@ def portScan(targetHost, targetPorts):
     setdefaulttimeout(1)
 
     for port in targetPorts:
-        print "Scannig port "+ port
-        connScan(targetHost, int(port))
+        t = Thread(target=connScan, args=(targetHost, int(port)))
+        t.start()
 
 def main():
+    parser = argparse.ArgumentParser(description="Port Scanner")
+    parser.add_argument("-H", "--host", dest="targetHost", help="Type the target host", required=True)
+    parser.add_argument("-p", "--port", dest="targetPort", type=str, help="Type the target port", required=True)
+    arguments = parser.parse_args()
+
     targetPorts = arguments.targetPort.split(",")
     portScan(arguments.targetHost, targetPorts)
 
