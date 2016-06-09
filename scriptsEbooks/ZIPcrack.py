@@ -2,7 +2,7 @@
 
 #Author: Miguel Rodriguez
 #Date: 07/07/2016
-#Description: UNIX password cracker
+#Description: ZIP password cracker
 #Contact: marbrb1@gmail.com
 
 import zipfile
