@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #Author: Miguel Rodriguez
-#Date: 07/07/2016
+#Date: 07/06/2016
 #Description: UNIX password cracker
 #Contact: marbrb1@gmail.com
 

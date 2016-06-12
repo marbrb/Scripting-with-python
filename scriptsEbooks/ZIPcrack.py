@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #Author: Miguel Rodriguez
-#Date: 07/07/2016
+#Date: 07/06/2016
 #Description: ZIP password cracker
 #Contact: marbrb1@gmail.com
 
@@ -20,7 +20,7 @@ def main():
     parser = argparse.ArgumentParser(description="Zip-File password cracker")
     parser.add_argument("-f", "--file", dest="zipfile", help="zip-file path", required=True)
     arguments = parser.parse_args()
-    
+
     zipFile = zipfile.ZipFile(arguments.zipfile)
     passFile = open("dictionary.txt", "r")
     for line in passFile.readlines():

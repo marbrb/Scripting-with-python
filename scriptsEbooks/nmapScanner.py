@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #Author: Miguel Rodriguez
-#Date: 10/07/2016
+#Date: 10/06/2016
 #Description: Simple port scanner using nmap
 #Contact: marbrb1@gmail.com
 
