@@ -2,7 +2,7 @@ import socket
 import threading
 
 bindIP = "0.0.0.0"
-bindPort = 9999
+bindPort = 8888
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
