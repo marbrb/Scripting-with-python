@@ -1,5 +1,6 @@
 import socket
 import threading
+from sys import exit
 
 bindIP = "0.0.0.0"
 bindPort = 8888
@@ -20,8 +21,12 @@ def handleClient(clientSocket):
     clientSocket.close()
 
 while 1:
-    client, addr = server.accept()
-    print "[*] Accepted connection from: {}:{}".format(addr[0], addr[1])
-
-    handler = threading.Thread(target=handleClient, args=(client,))
-    handler.start()
+    try:
+        client, addr = server.accept()
+        print "[*] Accepted connection from: {}:{}".format(addr[0], addr[1])
+        
+        handler = threading.Thread(target=handleClient, args=(client,))
+        handler.start()
+    except KeyboardInterrupt:
+        print "\nCtrl C - Stopping server."
+        exit(1)        
