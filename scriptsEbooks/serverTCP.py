@@ -1,10 +1,10 @@
 import socket
 import threading
-from sys import exit
+import sys
 
-bindIP = "0.0.0.0"
-bindPort = 8888
-
+bindIP = sys.argv[1]
+bindPort = int(sys.argv[2])
+clients = []
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server.bind((bindIP, bindPort))
@@ -24,9 +24,11 @@ while 1:
     try:
         client, addr = server.accept()
         print "[*] Accepted connection from: {}:{}".format(addr[0], addr[1])
-        
+
+        clients.append(client)
+
         handler = threading.Thread(target=handleClient, args=(client,))
         handler.start()
     except KeyboardInterrupt:
         print "\nCtrl C - Stopping server."
-        exit(1)        
+        sys.exit(1)

@@ -9,7 +9,7 @@ import sys
 
 buffer_size = 4096
 delay = 0.0001
-forward_to = ('0.0.0.0', 8888)
+forward_to = ('localhost', 8888)
 
 #responsible for establishing a connection between the proxy
 #and the remote server(original target).
@@ -27,7 +27,7 @@ class Forward:
 
 class Server:
     input_list = [] #storage all the avalible sockets
-    channel = {}
+    channel = {}    #to associate the endpoints(client<==>server)
     def __init__(self, host, port):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #prevents TIME_WAIT state of the socket
@@ -52,30 +52,51 @@ class Server:
 
                 else:
                     self.on_recv()
+
     def on_accept(self):
-        forward = Forward().start(forward_to[0], forward_to[1])
-        clientsock, clientaddr = self.server.accept()
+        forward = Forward().start(forward_to[0], forward_to[1]) #connection with remote server
+        clientsock, clientaddr = self.server.accept()   #accept the client connection
         if forward:
-            print clientaddr + "{} has connected.".format(clientaddr)
+            print "{} has connected.".format(clientaddr)
+            #added both sockets to input_list
             self.input_list.append(clientsock)
             self.input_list.append(forward)
+            #added endpoints to channel dict
             self.channel[clientsock] = forward
             self.channel[forward] = clientsock
 
         else:
-            print "Can't establish connection with remote server.",
+            print "Can't establish connection with remote server."
             print "Closing connection with client side", clientaddr
             clientsock.close()
 
+    def on_close(self):
+        print self.s.getpeername(), "has disconnected\n"
+        #remove objects from input list
+        self.input_list.remove(self.s)
+        self.input_list.remove(self.channel[self.s])
+        out = self.channel[self.s]
+        #close the connection with client
+        self.channel[out].close()   #equivalent to do self.s.close()
+        #close the connection with remote server
+        self.channel[self.s].close()
+        #delete both objects from channel dict
+        del self.channel[out]
+        del self.channel[self.s]
+
     def on_recv(self):
         data = self.data
-        print data
+        if self.s.getsockname()[1] == 9000:
+            print "Client message:  {}".format(data)
+        else:
+            print "Server message:  {}".format(data)
+
         self.channel[self.s].send(data)
 
 if __name__ == "__main__":
-    server = Server('', 9000)
+    server = Server('localhost', 9000)
     try:
         server.main_loop()
     except KeyboardInterrupt:
-        print "Ctrl C - Sopping server"
+        print "\nCtrl C - Sopping proxy"
         sys.exit(1)
