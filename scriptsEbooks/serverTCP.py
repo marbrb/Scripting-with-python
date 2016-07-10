@@ -15,7 +15,7 @@ print "[*] listening on {}:{}".format(bindIP,bindPort)
 def handleClient(clientSocket):
     request = clientSocket.recv(1024)
     print "[*] Recived: " + str(request)
-
+    print "[*] Send reponse: 'ACK!'"
     clientSocket.send("ACK!")   #send back a packet
 
     clientSocket.close()
