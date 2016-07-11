@@ -1,8 +1,10 @@
+#encoding: utf8
 import sys
 import socket
 import threading
 import argparse
-
+import requests
+from bs4 import BeautifulSoup
 
 def server_loop(lHost, lPort, rHost, rPort,receive_first):
 
@@ -27,18 +29,18 @@ def server_loop(lHost, lPort, rHost, rPort,receive_first):
         proxy_thread.start()
 
 #print out hexadecimal values and ASCII-printable characters
-def hexdump(src, length=16):
-    result = []
-    #great
-    digits = 4 if isinstance(src, unicode) else 2
-
-    for i in xrange(0, len(src), length):
-        s = src[i:i+length]
-        hexa = b' '.join(["%0*X" % (digits, ord(x)) for x in s])
-        text = b''.join([x if 0x20 <= ord(x) < 0x7F else b'.' for x in s])
-        result.append( b"%04X %-*s %s" % (i, length*(digits + 1), hexa, text))
-
-    print b'\n'.join(result)
+# def hexdump(src, length=16):
+#     result = []
+#     #great
+#     digits = 4 if isinstance(src, unicode) else 2
+#
+#     for i in xrange(0, len(src), length):
+#         s = src[i:i+length]
+#         hexa = b' '.join(["%0*X" % (digits, ord(x)) for x in s])
+#         text = b''.join([x if 0x20 <= ord(x) < 0x7F else b'.' for x in s])
+#         result.append( b"%04X %-*s %s" % (i, length*(digits + 1), hexa, text))
+#
+#     print b'\n'.join(result)
 
 def receive_from(connection):
     buffer = ""
@@ -58,11 +60,18 @@ def receive_from(connection):
 
 #modify any requets destined for the remote host(The server)
 def request_handler(buffer):
-    #perform packet modifications
+    print "REQUEST : {}".format(buffer)
     return buffer
+    #r = requests.get('http://'+buffer)
+    #return r.text.encode('ascii','ignore')
+
+    #soup = BeautifulSoup(r.text.encode('ascii','ignore'), 'html.parser')
+    #return str(soup)
+
 
 #modify any response destined for the local host!
 def response_handler(buffer):
+    print "RESPONSE : {}".format(buffer)
     #perform packet modifications
     return buffer
 
@@ -76,7 +85,7 @@ def proxy_handler(client_socket, rHost, rPort, receive_first):
     #receive data from the remote end if necessary
     if receive_first:
         remote_buffer = receive_from(remote_socket)
-        hexdump(remote_buffer)
+        #hexdump(remote_buffer)
 
         #send it to our response handler
         remote_buffer = response_handler(remote_buffer)
@@ -84,7 +93,7 @@ def proxy_handler(client_socket, rHost, rPort, receive_first):
         # if we have data to send to our local client, send it
         if len(remote_buffer):
             print "[<==] Sending {} bytes to localhost.".format(len(remote_buffer))
-            client_socket.sent(remote_buffer)
+            client_socket.send(remote_buffer)
     #read loop and local
     #send to remote, send to local
 
@@ -94,21 +103,21 @@ def proxy_handler(client_socket, rHost, rPort, receive_first):
 
         if len(local_buffer):
             print "[==>] Received {} bytes from localhost.".format(len(local_buffer))
-            hexdump(local_buffer)
+        #    hexdump(local_buffer)
 
             #send it to our local request handler
             local_buffer = request_handler(local_buffer)
 
             #send off the data to the remote host
             remote_socket.send(local_buffer)
-            print "[==>] send to remote."
+            print "[==>] send to remote {} bytes.".format(len(local_buffer))
 
         #receive back the response
         remote_buffer = receive_from(remote_socket)
 
         if len(remote_buffer):
             print "[<==] Received {} bytes from remote.".format(len(remote_buffer))
-            hexdump(remote_buffer)
+        #    hexdump(remote_buffer)
 
             #send to our response handler
             remote_buffer = response_handler(remote_buffer)
