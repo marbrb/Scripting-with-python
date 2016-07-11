@@ -13,7 +13,7 @@ server.listen(5)
 print "[*] listening on {}:{}".format(bindIP,bindPort)
 
 def handleClient(clientSocket):
-    request = clientSocket.recv(1024)
+    request = clientSocket.recv(3072)
     print "[*] Recived: " + str(request)
     print "[*] Send reponse: 'ACK!'"
     clientSocket.send("ACK!")   #send back a packet
