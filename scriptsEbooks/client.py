@@ -11,7 +11,7 @@ try:
 except Exception as e:
     print "Error {}".format(e)
 
-client.send("Buena el server")
+client.send("sitioweb.com")
 
 response = client.recv(1024)
 client.close()
