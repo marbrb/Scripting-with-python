@@ -1,9 +1,10 @@
+#!/usr/bin/python3
 a = [1,2,3]
 b = [1,2,3]
 
 #enumerate() retorna un iterable de (indice, lista[indice])
 for indice, item in enumerate(a):
-    print("indice: {}  -  item: {}". format(indice, iteam))
+    print("indice: {}  -  item: {}". format(indice, item))
 
 #zip() retorna tuplas de el i-ésimo item de cada iterable
 for x, y in zip(a,b):
@@ -27,3 +28,4 @@ a = set()   #empty set
 a.add(1)
 a.update({1,2,3})   #take set(s) as argument
 
+print("\nthis is a centered set:\n {:^50}".format(str(a)))
