@@ -8,8 +8,9 @@ print(re.sub(r'\bROAD\b', 'RD', addr2)) # \b indica que debe existir en ese punt
 
 #roman numerals
 
-pattern = r'^M?M?M?$'   # ? hace que un patron sea opcional, es decir pueden haber de 0-3 My el patron coincidirá
+pattern = r'^M?M?M?$'   # ? hace que un patron sea opcional, es decir pueden haber de 0-3 'M' y el patron coincidirá
 
+#la funcion search retorna un objeto para manipular la cadena
 if re.search(pattern, 'MMM'): print("coincide")
 if not re.search(pattern, 'MMMM'): print("no coincide")
 if re.search(pattern, ''): print("coincide")
