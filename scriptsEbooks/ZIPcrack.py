@@ -12,7 +12,7 @@ import argparse
 def extractFile(zipFile, password):
     try:
         zipFile.extractall(pwd=password)
-        print "[+] Found password: %s"%(password)
+        print( "[+] Found password: {}".format(password))
     except:
         pass
 
