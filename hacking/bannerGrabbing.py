@@ -1,11 +1,12 @@
+#!/usr/bin/python3
 #encoding: utf8
 import socket
-
-#retorna la version y que servicio esta corriendo
+from sys import argv
 def bannerGrabbing(host, port):
+    "Connect to the port and receive data from this."
     try:
         connection = socket.socket()
-        connection.settimeout(1)    #tiempo en el que trata de conectarse o recibir una conexion
+        connection.settimeout(1)
         connection.connect((host, port))
         connection.send(b'Exploiter.co')
         result = connection.recv(1024)
@@ -21,4 +22,4 @@ def bannerGrabbing(host, port):
 ports = [21, 22, 80, 445, 139, 8080]
 
 for port in ports:
-    bannerGrabbing('192.168.0.18', port) #ip calvo
+    bannerGrabbing(argv[1], port)
