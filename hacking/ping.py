@@ -18,11 +18,15 @@ def ping(ip):
     else:   #si responde 1 es porque la maquina no responde y otro número es por un error
         print("La máquina está muelta :c")
 
-print("Digite la IP ó 'hecho' si no quiere conectarse a más IPs")
+def main():
+    print("Digite la IP ó 'hecho' si no quiere conectarse a más IPs")
 
-while True:
-    ip = input("> ")
+    while True:
+        ip = input("> ")
 
-    if ip == "hecho":
-        break
-    ping(ip)
+        if ip == "hecho":
+            break
+        ping(ip)
+        
+if __name__ == '__main__':
+    main()

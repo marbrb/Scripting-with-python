@@ -55,23 +55,26 @@ def phpinfoDetection(url):
 
 
 
+def main():
+    parser  = argparse.ArgumentParser(description= "Script para detectar archivos sensibles")
+    parser.add_argument(
+        "-u", "--url", dest="website_url", help="Especifica la URL completa", required=True
+        )
+    arguments = parser.parse_args()
 
-parser  = argparse.ArgumentParser(description= "Script para detectar archivos sensibles")
-parser.add_argument(
-    "-u", "--url", dest="website_url", help="Especifica la URL completa", required=True
-    )
-arguments = parser.parse_args()
+    if arguments.website_url:
+        robotsResponse = robotsDetection(arguments.website_url)
+        if robotsResponse:  #Si la lista tiene contenido retorna True
+            for line in robotsResponse:
+                if line.startswith("Disallow:"):
+                    print(line)
+        phpRespose = phpinfoDetection(arguments.website_url)
+        if phpRespose:
+            print("Version de PHP : {}".format(phpRespose[0]))
+            print("Version del sistema : {}".format(phpRespose[1]))
 
-if arguments.website_url:
-    robotsResponse = robotsDetection(arguments.website_url)
-    if robotsResponse:  #Si la lista tiene contenido retorna True
-        for line in robotsResponse:
-            if line.startswith("Disallow:"):
-                print(line)
-    phpRespose = phpinfoDetection(arguments.website_url)
-    if phpRespose:
-        print("Version de PHP : {}".format(phpRespose[0]))
-        print("Version del sistema : {}".format(phpRespose[1]))
+    else:
+        print("No hay url a la cual conectarse")
 
-else:
-    print("No hay url a la cual conectarse")
+if __name__ == '__main__':
+    main()

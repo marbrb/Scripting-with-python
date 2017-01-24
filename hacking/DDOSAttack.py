@@ -8,12 +8,8 @@ parser.add_argument("-t", "--target", dest="target", help="Target IP", required=
 arguments = parser.parse_args()
 
 def randomIP():
-    part1 = str(randint(1,254))
-    part2 = str(randint(1,254))
-    part3 = str(randint(1,254))
-    part4 = str(randint(1,254))
-    dot = "."
-    return(part1+dot+part2+dot+part3+dot+part4)
+    nums = [str(randint(1,254)) for x in range(4)]
+    return(".".join(nums))
 
 while True:
     IP1 = IP(src=randomIP(), dst=arguments.target)
